@@ -1,7 +1,7 @@
 
 
 from typing import Optional, List
-from datetime import datetime
+from datetime import datetime, UTC
 from sqlalchemy import and_, or_
 from sqlalchemy.orm import session as sa_session, query as sa_query
 from ..models.common import SubTypeEnum
@@ -79,7 +79,7 @@ def update_subscription(query: sa_query.Query, db_session: sa_session.Session, d
             break
     if _update:
         updates = data.model_dump()
-        updates['update_time'] = datetime.utcnow()
+        updates['update_time'] = datetime.now(UTC)
         query.update(updates)
         db_session.commit()
 

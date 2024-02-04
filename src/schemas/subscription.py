@@ -1,5 +1,6 @@
 
 from datetime import datetime
+from typing import List
 from pydantic import BaseModel
 from ..models.common import SubTypeEnum
 
@@ -21,7 +22,24 @@ class Subscription(SubscriptionBase):
         from_attributes = True
 
 
-class Unsubscription(BaseModel):
+class UnsubscribeSchema(BaseModel):
     user_identifier: str | None = None
     email: str | None = None
     mobile: str | None = None
+
+
+class RespBaseSchema(BaseModel):
+    msg: str
+    err_code: str
+
+
+class RespSubSchema(RespBaseSchema):
+    data: Subscription
+
+
+class RespMultiSubSchema(RespBaseSchema):
+    data: List[Subscription]
+
+
+class RespUnsubSchema(RespBaseSchema):
+    data: List[int]

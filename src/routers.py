@@ -4,7 +4,8 @@ import logging
 from typing import Optional
 from fastapi import APIRouter, Request
 from .operations import subscription_ops
-from .schemas.subscription import SubscriptionBase as SubscriptionBaseSchema, Unsubscription
+from .schemas.subscription import SubscriptionBase as SubscriptionBaseSchema, \
+    UnsubscribeSchema, RespSubSchema, RespMultiSubSchema, RespUnsubSchema
 
 
 sub_router = APIRouter(
@@ -14,6 +15,7 @@ sub_router = APIRouter(
 
 @sub_router.get(
     "/subscriptions", 
+    response_model=RespMultiSubSchema
 )
 async def get_subscriptions(
         request: Request,
@@ -38,6 +40,7 @@ async def get_subscriptions(
 
 @sub_router.post(
     "/subscribe",
+    response_model=RespSubSchema
 )
 async def subscribe(request: Request, subscription: SubscriptionBaseSchema):
     """Create or update subscription"""
@@ -53,15 +56,15 @@ async def subscribe(request: Request, subscription: SubscriptionBaseSchema):
         'msg': 'success',
         'err_code': '0'
     }
-    # return subscription_obj
 
 
 @sub_router.post(
-    "/unsubscribe"
+    "/unsubscribe",
+    response_model=RespUnsubSchema
 )
 async def unsubscribe(
         request: Request,
-        body: Unsubscription,
+        body: UnsubscribeSchema,
     ):
     """Unsubscribe newsletter"""
     logging.info(f"[UnsubscribeSubscription] {body}")

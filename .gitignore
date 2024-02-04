@@ -161,6 +161,7 @@ api_project.json
 # Alembic
 local/
 local.ini
+alembic.ini
 
 # apiDoc
 doc/
