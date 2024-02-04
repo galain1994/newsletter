@@ -14,12 +14,14 @@ email_subscription = {
     'user_identifier': user_identifier,
     'sub_type': 'email',
     'sub_address': 'example@example.com',
+    'is_promotion': True
 }
 
 sns_subscription = {
     'user_identifier': user_identifier,
     'sub_type': 'sns',
     'sub_address': '123456789',
+    'is_promotion': False,
 }
 
 new_email = 'example_new@example.com'
@@ -39,7 +41,8 @@ class TestSubscription:
         print(result)
         assert result['data']['user_identifier'] == user_identifier \
             and result['data']['sub_type'] == email_subscription['sub_type'] \
-            and result['data']['sub_address'] == email_subscription['sub_address']
+            and result['data']['sub_address'] == email_subscription['sub_address'] \
+            and result['data']['is_promotion'] == email_subscription['is_promotion']
 
 
     def test_create_sns_subscription(self):
@@ -51,7 +54,8 @@ class TestSubscription:
         result = resp.json()
         assert result['data']['user_identifier'] == user_identifier \
             and result['data']['sub_type'] == sns_subscription['sub_type'] \
-            and result['data']['sub_address'] == sns_subscription['sub_address']
+            and result['data']['sub_address'] == sns_subscription['sub_address'] \
+            and result['data']['is_promotion'] == sns_subscription['is_promotion']
 
 
     # Get

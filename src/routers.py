@@ -92,3 +92,14 @@ async def unsubscribe(
 # )
 # async def add_subscription():
 #     pass
+
+
+# Create send task
+# support both sync and async method, async could use Celery
+
+# @sub_router.post(
+#     '/task'
+# )
+# async def modify_task(request: Request, body):
+#     """Create or update task"""
+#     pass

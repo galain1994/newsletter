@@ -11,6 +11,7 @@ class SubscriptionBase(BaseModel):
     sub_address: str
     is_active: bool | None = True
     meta_flag: str | None = None
+    is_promotion: bool | None = True
 
 
 class Subscription(SubscriptionBase):

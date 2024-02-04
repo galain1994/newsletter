@@ -40,6 +40,13 @@ class Subscription(Base):
         'is_active', sa.Boolean, index=True, default=True,
         comment="Is active"
     )
+    # subscribe contents 订阅内容
+    is_promotion = sa.Column(
+        'is_promotion', sa.Boolean, index=True, default=True, comment="Is Promotion"
+    )
+    # is_notification = sa.Column(
+    #     'is_notification', sa.Boolean, index=True, default=True, comment="Is Notification"
+    # )
     # Meta Data
     create_time = sa.Column(
         'create_time', sa.TIMESTAMP, default=sa.ColumnDefault(datetime.utcnow),
