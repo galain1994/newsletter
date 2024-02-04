@@ -1,7 +1,7 @@
 
 from datetime import datetime
 from pydantic import BaseModel
-from ..common import SubTypeEnum
+from ..models.common import SubTypeEnum
 
 
 class SubscriptionBase(BaseModel):
@@ -12,10 +12,6 @@ class SubscriptionBase(BaseModel):
     meta_flag: str | None = None
 
 
-class SubscriptionCreate(SubscriptionBase):
-
-    pass
-
 class Subscription(SubscriptionBase):
     id: int
     create_time: datetime
@@ -23,3 +19,9 @@ class Subscription(SubscriptionBase):
 
     class Config:
         from_attributes = True
+
+
+class Unsubscription(BaseModel):
+    user_identifier: str | None = None
+    email: str | None = None
+    mobile: str | None = None

@@ -3,8 +3,7 @@
 from datetime import datetime
 import sqlalchemy as sa
 from .base import Base
-from ..common import SubTypeEnum
-from ..schemas.subscription import SubscriptionCreate, SubscriptionBase
+from .common import SubTypeEnum
 
 
 class Subscription(Base):
@@ -14,6 +13,7 @@ class Subscription(Base):
     """
     __tablename__ = 'subscription'
     __table_args__ = (
+        sa.UniqueConstraint('user_identifier', 'sub_type', name='user_sub_type_uix'),
         sa.UniqueConstraint('sub_type', 'sub_address', name='sub_type_sub_address_uix'),
     )
 
@@ -53,31 +53,3 @@ class Subscription(Base):
     meta_flag = sa.Column(
         'meta_flag', sa.String, comment="Meta Flag"
     )
-
-    @classmethod
-    def create_subscription(cls, db_session: sa.orm.session.Session, data: SubscriptionCreate):
-        """Create Subscription"""
-        obj = cls(**data.model_dump())
-        db_session.add(obj)
-        db_session.commit()
-        return obj
-
-    @classmethod
-    def create_or_update_subscription(cls, db_session: sa.orm.session.Session, data: SubscriptionBase):
-        """Create or update subscription based on sub_type and user"""
-        record = db_session.execute(sa.select(cls).filter_by(
-            user_identifier=data.user_identifier, sub_type=data.sub_type
-        )).scalar_one()
-
-        if not record:
-            record = cls.create_subscription(db_session, data)
-        else:
-            import pdb; pdb.set_trace()
-            record.update_subscription(db_session, data)
-        return record
-
-    def update_subscription(self, db_session: sa.orm.session.Session, data: SubscriptionBase):
-        """Update subscription"""
-        import pdb; pdb.set_trace()
-        self.update(data.model_dump(), update_time=datetime.utcnow())
-        db_session.commit()

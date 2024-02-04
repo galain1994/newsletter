@@ -1,7 +1,7 @@
 
 
 from fastapi import FastAPI, Request, Response
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, func
 from sqlalchemy.orm import sessionmaker, scoped_session
 from .config import load_config, Settings
 from .utils.sentry_utils import sentry_init
@@ -27,12 +27,12 @@ def make_app():
 
     init_everything(settings)
 
-    SessionFactory = scoped_session(
+    session_factory = scoped_session(
         sessionmaker(
             bind=create_engine(settings.SQLALCHEMY_URI)
         )
     )
-    from fastapi.middleware.gzip import GZipMiddleware
+    app.state.session_factory = session_factory
 
     @app.route('/health')
     async def health_check(request) -> Response:
@@ -40,7 +40,7 @@ def make_app():
 
     @app.middleware('http')
     async def db_session_middleware(request: Request, call_next) -> Response:
-        with SessionFactory() as db_session:
+        with session_factory() as db_session:
             request.state.db_session = db_session
             response = await call_next(request)
         return response
