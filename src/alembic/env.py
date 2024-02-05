@@ -1,3 +1,4 @@
+import os
 from logging.config import fileConfig
 
 from sqlalchemy import engine_from_config
@@ -58,11 +59,19 @@ def run_migrations_online() -> None:
     and associate a connection with the context.
 
     """
-    connectable = engine_from_config(
-        config.get_section(config.config_ini_section, {}),
-        prefix="sqlalchemy.",
-        poolclass=pool.NullPool,
-    )
+    sqlalchemy_url = os.environ.get('SQLALCHEMY_URI')
+    print(sqlalchemy_url)
+    if sqlalchemy_url:
+        connectable = engine_from_config({
+            'sqlalchemy.url': sqlalchemy_url,
+            '_coerce_config': True,
+        })
+    else:
+        connectable = engine_from_config(
+            config.get_section(config.config_ini_section, {}),
+            prefix="sqlalchemy.",
+            poolclass=pool.NullPool,
+        )
 
     with connectable.connect() as connection:
         context.configure(

@@ -166,4 +166,7 @@ alembic.ini
 # apiDoc
 doc/
 
+# pgdata
+pgdata/
+
 .vscode
